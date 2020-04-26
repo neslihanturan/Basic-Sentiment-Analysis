@@ -5,7 +5,9 @@ zemberek_api =  lib.zemberek_api(libjvmpath="/usr/lib/jvm/java-11-openjdk-amd64/
 turkishTokenizer = zemberek_api.getTurkishTokenizer()
 turkishPOSTagger = zemberek_api.getTurkishPOSTagger()
 
-corpus = "merhaba bu bir python zemberek denemesidir. bu denemeden garip yazılar. Gizli tanik ifade verdi"
+
+with open('./zemberek_python/data.txt', 'r') as file:
+    corpus = file.read().replace('\n', '')
 
 sentences = lib.TokenizerTool(turkishTokenizer).tokenize(corpus)
 for sentence in sentences:
@@ -19,7 +21,6 @@ for sentence in sentences:
     pos_tagged_sentence = lib.POSTaggerTool(sentence_analysis).pos_tag(sentence_analysis)
     pos_tagged_sentences.append(pos_tagged_sentence)
 
-print (pos_tagged_sentences)
-
-
-##print(a)
+dict_tagged_sentences = lib.DictionaryTagger(["./zemberek_python/positive.yml","./zemberek_python/negative.yml"]).tag(pos_tagged_sentences)
+print(dict_tagged_sentences)
+print(lib.Reviewer().sentiment_score (dict_tagged_sentences))
